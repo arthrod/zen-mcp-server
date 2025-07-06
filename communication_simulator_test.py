@@ -74,6 +74,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+from security import safe_command
 
 
 class CommunicationSimulator:
@@ -445,7 +446,7 @@ class CommunicationSimulator:
         if self.verbose:
             self.logger.debug(f"Running: {' '.join(cmd)}")
 
-        return subprocess.run(cmd, check=check, capture_output=capture_output, **kwargs)
+        return safe_command.run(subprocess.run, cmd, check=check, capture_output=capture_output, **kwargs)
 
 
 def parse_arguments():

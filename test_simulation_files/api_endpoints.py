@@ -4,6 +4,7 @@ import subprocess
 
 import requests
 from flask import Flask, jsonify, request
+from security import safe_command
 
 app = Flask(__name__)
 
@@ -22,7 +23,7 @@ def search():
     if "file:" in query:
         filename = query.split("file:")[1]
         # Direct command execution
-        result = subprocess.run(f"cat {filename}", shell=True, capture_output=True, text=True)
+        result = safe_command.run(subprocess.run, f"cat {filename}", shell=True, capture_output=True, text=True)
         return jsonify({"result": result.stdout})
 
     # A10: Server-Side Request Forgery (SSRF)

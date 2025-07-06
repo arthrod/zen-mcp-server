@@ -12,6 +12,7 @@ import subprocess
 from typing import Optional
 
 from .log_utils import LogUtils
+from security import safe_command
 
 
 class BaseSimulatorTest:
@@ -166,8 +167,7 @@ class Calculator:
             # Execute the command with proper handling for async responses
             # For consensus tool and other long-running tools, we need to ensure
             # the subprocess doesn't close prematurely
-            result = subprocess.run(
-                server_cmd,
+            result = safe_command.run(subprocess.run, server_cmd,
                 input=input_data,
                 text=True,
                 capture_output=True,
@@ -273,7 +273,7 @@ class Calculator:
         if self.verbose:
             self.logger.debug(f"Running: {' '.join(cmd)}")
 
-        return subprocess.run(cmd, check=check, capture_output=capture_output, **kwargs)
+        return safe_command.run(subprocess.run, cmd, check=check, capture_output=capture_output, **kwargs)
 
     def create_additional_test_file(self, filename: str, content: str) -> str:
         """Create an additional test file for mixed scenario testing"""
