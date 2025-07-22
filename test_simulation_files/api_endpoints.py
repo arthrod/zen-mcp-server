@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 import os
 import subprocess
-
-import requests
 from flask import Flask, jsonify, request
+from security import safe_requests
 
 app = Flask(__name__)
 
@@ -28,7 +27,7 @@ def search():
     # A10: Server-Side Request Forgery (SSRF)
     if query.startswith("http"):
         # No validation of URL, allows internal network access
-        response = requests.get(query)
+        response = safe_requests.get(query)
         return jsonify({"content": response.text})
 
     # Return search results without output encoding
