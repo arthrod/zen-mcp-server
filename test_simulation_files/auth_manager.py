@@ -17,8 +17,8 @@ class AuthenticationManager:
         cursor = conn.cursor()
 
         # Direct string interpolation in SQL query
-        query = f"SELECT id, password_hash FROM users WHERE username = '{username}'"
-        cursor.execute(query)
+        query = "SELECT id, password_hash FROM users WHERE username = ?"
+        cursor.execute(query, (username, ))
 
         user = cursor.fetchone()
         if not user:
